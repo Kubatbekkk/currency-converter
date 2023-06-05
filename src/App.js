@@ -27,7 +27,11 @@ export default function App() {
 
   let content;
   if (currencyStatus === 'loading') {
-    content = <p>Loading...</p>;
+    content = (
+      <div className="loading">
+        <h2>Loading...</h2>
+      </div>
+    );
   } else if (currencyStatus === 'succeeded') {
     content = (
       <>

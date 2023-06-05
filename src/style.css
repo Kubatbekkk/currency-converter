@@ -28,6 +28,15 @@ main {
   column-gap: 1rem;
 }
 
+.loading {
+  margin: 50vh auto;
+  padding: 2rem;
+  background: azure;
+  border: 1px solid rgba(6, 6, 235, 0.264);
+  border-radius: 5px;
+  transform: translateY(-50%);
+}
+
 .currency {
   padding: 1rem;
   height: 100vh;
