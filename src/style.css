@@ -181,6 +181,12 @@ Converter
   outline: none;
 }
 
+.converter__error {
+  margin: -12px 0;
+  color: red;
+  font-size: 10px;
+}
+
 .converter__cur-select {
   width: 30%;
 }

@@ -11,6 +11,7 @@ import {
   swapCurrencies,
   convertCurrency,
   getCurrencyStatus,
+  getCurrencyError,
 } from './currencySlice';
 import changeIcon from '../../assets/icons/change-icon.svg';
 
@@ -22,6 +23,7 @@ const CurrencyConverter = () => {
   const availableCurrencies = useSelector(getCurrencyNames);
   const convertedAmount = useSelector(getConvertedAmount);
   const currencyStatus = useSelector(getCurrencyStatus);
+  const errorMessage = useSelector(getCurrencyError);
 
   const handleCurrencyBaseChange = (e) => {
     const newBase = e.target.value;
@@ -41,8 +43,14 @@ const CurrencyConverter = () => {
 
   const handleBaseAmountChange = (e) => {
     const inputAmount = e.target.value;
-    const newBaseAmount = inputAmount !== '' ? +inputAmount : '';
-    dispatch(setBaseAmount(newBaseAmount));
+    dispatch(setBaseAmount(inputAmount));
+    if (currencyStatus === 'succeeded') {
+      dispatch(convertCurrency());
+    }
+  };
+
+  const handleInputMouseOut = () => {
+    dispatch(setBaseAmount('1'));
     if (currencyStatus === 'succeeded') {
       dispatch(convertCurrency());
     }
@@ -63,7 +71,11 @@ const CurrencyConverter = () => {
             className="converter__input"
             value={baseAmount}
             onChange={handleBaseAmountChange}
+            onMouseOut={handleInputMouseOut}
           />
+          {errorMessage && (
+            <span className="converter__error">{errorMessage}</span>
+          )}
           <select
             name="base-cur"
             value={selectedBase}

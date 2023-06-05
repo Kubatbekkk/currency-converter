@@ -16,7 +16,7 @@ const initialState = {
   rubValue: 1,
   rubNominal: 1,
   status: 'idle',
-  error: null,
+  error: '',
 };
 
 export const fetchCurrencies = createAsyncThunk(
@@ -80,7 +80,7 @@ const currencySlice = createSlice({
     setSelectedQuote: (state, action) => {
       state.currencyPair.quote = action.payload;
     },
-    findCurrencyPairBase: (state, action) => {
+    findCurrencyPairBase: (state) => {
       const selectedCurrency = state.currencyPairs.find(
         (currencyPair) => currencyPair.CharCode === state.currencyPair.base
       );
@@ -89,7 +89,7 @@ const currencySlice = createSlice({
       ).toFixed(2);
       state.convertedAmount = convertedResult;
     },
-    findCurrencyPairQuote: (state, action) => {
+    findCurrencyPairQuote: (state) => {
       const selectedCurrency = state.currencyPairs.find(
         (currencyPair) => currencyPair.CharCode === state.currencyPair.quote
       );
@@ -99,9 +99,16 @@ const currencySlice = createSlice({
       state.convertedAmount = convertedResult;
     },
     setBaseAmount: (state, action) => {
-      state.baseAmount = action.payload !== '' ? +action.payload : '';
+      const inputAmount = action.payload;
+      const newBaseAmount = inputAmount.replace(/\D/g, '');
+      state.baseAmount = newBaseAmount;
+      if (inputAmount !== newBaseAmount) {
+        state.error = 'Пожалуйста, введите только цифры';
+      } else {
+        state.error = '';
+      }
     },
-    swapCurrencies: (state, action) => {
+    swapCurrencies: (state) => {
       [state.currencyPair.base, state.currencyPair.quote] = [
         state.currencyPair.quote,
         state.currencyPair.base,
@@ -111,7 +118,7 @@ const currencySlice = createSlice({
   //? extraReducers для составления state.currencyPairs
   extraReducers(builder) {
     builder
-      .addCase(fetchCurrencies.pending, (state, action) => {
+      .addCase(fetchCurrencies.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchCurrencies.fulfilled, (state, action) => {
