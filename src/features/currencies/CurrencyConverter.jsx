@@ -50,7 +50,7 @@ const CurrencyConverter = () => {
   };
 
   const handleInputMouseOut = () => {
-    dispatch(setBaseAmount('1'));
+    errorMessage && dispatch(setBaseAmount('1'));
     if (currencyStatus === 'succeeded') {
       dispatch(convertCurrency());
     }
