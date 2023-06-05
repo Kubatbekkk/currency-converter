@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { extractCurrencyNames } from '../../lib/extractCurrencyNames';
-import axios from 'axios';
-
-const CURRENCY_URL = 'https://www.cbr-xml-daily.ru/daily_json.js';
+import { fetchCurrencyData } from '../api/fetchCurrencyData';
 
 const initialState = {
   currencyPairs: [],
@@ -23,10 +21,7 @@ const initialState = {
 
 export const fetchCurrencies = createAsyncThunk(
   'currencies/fetchCurrencies',
-  async () => {
-    const response = await axios.get(CURRENCY_URL);
-    return response.data;
-  }
+  fetchCurrencyData
 );
 
 export const convertCurrency = createAsyncThunk(
